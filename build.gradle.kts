@@ -5,6 +5,7 @@ plugins {
     kotlin("kapt") version "1.5.21"
     kotlin("plugin.spring") version "1.5.21"
     kotlin("plugin.jpa") version "1.5.21"
+    jacoco
     id("org.springframework.boot") version "2.5.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
@@ -12,7 +13,8 @@ plugins {
 group = "at.bayava"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
-val queryDslVersion="5.0.0"
+val queryDslVersion = "5.0.0"
+val kotestVersion = "4.6.+"
 
 repositories {
     mavenCentral()
@@ -34,10 +36,11 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.+")
     implementation("ch.qos.logback:logback-classic:1.2.+")
 
-//    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.8.+")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2")
+    testImplementation("io.kotest:kotest-runner-junit5:${kotestVersion}")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:1.0.+")
 }
 
 tasks.withType<KotlinCompile> {
@@ -49,4 +52,10 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.isEnabled = true
+    }
 }
