@@ -6,7 +6,7 @@ plugins {
     kotlin("plugin.spring") version "1.5.21"
     kotlin("plugin.jpa") version "1.5.21"
     jacoco
-    id("org.springframework.boot") version "2.5.4"
+//    id("org.springframework.boot") version "2.5.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 
@@ -15,6 +15,7 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 val queryDslVersion = "5.0.0"
 val kotestVersion = "4.6.+"
+val springBootVersion = "2.5.4"
 
 repositories {
     mavenCentral()
@@ -34,10 +35,10 @@ dependencies {
     implementation("com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.+")
-    implementation("ch.qos.logback:logback-classic:1.2.+")
+    runtimeOnly("ch.qos.logback:logback-classic:1.2.+")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
     testImplementation("com.h2database:h2")
     testImplementation("io.kotest:kotest-runner-junit5:${kotestVersion}")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.0.+")
