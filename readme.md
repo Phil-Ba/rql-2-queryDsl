@@ -1,3 +1,5 @@
+![Build Status](https://app.travis-ci.com/Phil-Ba/rql-2-queryDsl.svg?branch=master)
+
 # About
 
 This library aims to provide a queryDsl(JPA) based implementation for the RQL language. It is based on

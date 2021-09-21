@@ -3,7 +3,6 @@ package at.bayava.rql2querydsl
 import at.bayava.rql2querydsl.model.operator.*
 import com.querydsl.core.types.ExpressionUtils
 import com.querydsl.core.types.Ops
-import com.querydsl.core.types.Path
 import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.core.types.dsl.PathBuilder
@@ -13,10 +12,6 @@ import net.jazdw.rql.parser.SimpleASTVisitor
 
 private val logger = KotlinLogging.logger {}
 class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisitor<Predicate> {
-    private val root: Path<Any> = Expressions.path(
-        clazz,
-        "root"
-    )
 
     val operatorsBySymbol: Map<String, RqlOperator> =
         DefaultLogicalOperators.values()
