@@ -39,7 +39,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
-    testImplementation("com.h2database:h2")
+    testImplementation("com.h2database:h2:1.4.200")
     testImplementation("io.kotest:kotest-runner-junit5:${kotestVersion}")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.0.+")
 }
@@ -57,6 +57,6 @@ tasks.withType<Test> {
 
 tasks.jacocoTestReport {
     reports {
-        xml.isEnabled = true
+        xml.required.set(true)
     }
 }
