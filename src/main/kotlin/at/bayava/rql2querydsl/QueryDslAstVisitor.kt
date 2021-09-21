@@ -7,9 +7,11 @@ import com.querydsl.core.types.Path
 import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.core.types.dsl.PathBuilder
+import mu.KotlinLogging
 import net.jazdw.rql.parser.ASTNode
 import net.jazdw.rql.parser.SimpleASTVisitor
 
+private val logger = KotlinLogging.logger {}
 class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisitor<Predicate> {
     private val root: Path<Any> = Expressions.path(
         clazz,
@@ -24,10 +26,10 @@ class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisitor<Predica
             .toMap()
 
     override fun visit(node: ASTNode): Predicate {
-        println(node)
+        logger.debug { "Node[${node}]" }
         val operator = operatorsBySymbol[node.name]!!
         val arguments = node.arguments
-        println(operator)
+        logger.debug { "Operator[${operator}]" }
         return when (operator) {
             is LogicalOperator -> {
                 if (arguments.any { it is ASTNode == false }) throw IllegalArgumentException("Operator[${operator}] can only contain other operators!")
@@ -48,7 +50,7 @@ class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisitor<Predica
                     "root"
                 ).get(selector)
 
-                val field = (clazz::getDeclaredField)(selector)
+//                val field = (clazz::getDeclaredField)(selector)
 
                 return Expressions.predicate(
                     operator.qOperator,
