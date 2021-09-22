@@ -1,4 +1,4 @@
-[![Build Status](https://app.travis-ci.com/Phil-Ba/rql-2-queryDsl.svg?branch=master)](https://app.travis-ci.com/github/Phil-Ba/rql-2-queryDsl)
+[![Build Status](https://app.travis-ci.com/Phil-Ba/rql-2-queryDsl.svg?branch=master&kill_cache=1)](https://app.travis-ci.com/github/Phil-Ba/rql-2-queryDsl)
 [![Coverage Status](https://coveralls.io/repos/github/Phil-Ba/rql-2-queryDsl/badge.svg?branch=master&kill_cache=1)](https://coveralls.io/github/Phil-Ba/rql-2-queryDsl?branch=master)
 # About
 
