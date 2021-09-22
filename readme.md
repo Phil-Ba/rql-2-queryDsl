@@ -1,5 +1,5 @@
-![Build Status](https://app.travis-ci.com/Phil-Ba/rql-2-queryDsl.svg?branch=master)
-
+[![Build Status](https://app.travis-ci.com/Phil-Ba/rql-2-queryDsl.svg?branch=master)](https://app.travis-ci.com/github/Phil-Ba/rql-2-queryDsl)
+[![Coverage Status](https://coveralls.io/repos/github/Phil-Ba/rql-2-queryDsl/badge.svg?branch=master)](https://coveralls.io/github/Phil-Ba/rql-2-queryDsl?branch=master)
 # About
 
 This library aims to provide a queryDsl(JPA) based implementation for the RQL language. It is based on
