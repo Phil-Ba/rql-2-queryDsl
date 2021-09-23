@@ -29,8 +29,10 @@ class QueryDslAstVisitorTest @Autowired constructor(val em: EntityManager) : Fun
         "and(name=John,lt(age,20),gt(age,10))"
     ).forEach {
         test("testing basic query[$it]") {
-            em.persist(Person(name = "John", age = 12))
-            em.persist(Person(name = "John", age = 14))
+            val person1 = Person(name = "John", age = 12)
+            em.persist(person1)
+            val person2 = Person(name = "John", age = 14)
+            em.persist(person2)
             em.persist(Person(name = "John", age = 8))
             em.persist(Person(name = "John", age = 22))
             em.persist(Person(name = "Hank", age = 12))
@@ -45,6 +47,34 @@ class QueryDslAstVisitorTest @Autowired constructor(val em: EntityManager) : Fun
             println(result)
             Assertions.assertThat(result)
                 .hasSize(2)
+                .containsExactlyInAnyOrder(person1, person2)
+        }
+    }
+
+    listOf(
+        "name=in=(Heinz,Karl,Frida)",
+        "in(name,Heinz,Karl,Frida)",
+    ).forEach {
+        test("testing 'in' query[$it]") {
+            val person1 = Person(name = "Heinz", age = 12)
+            val person2 = Person(name = "Frida", age = 14)
+            em.persist(person1)
+            em.persist(person2)
+            em.persist(Person(name = "Heinzi", age = 8))
+            em.persist(Person(name = "John", age = 22))
+            em.persist(Person(name = "Hank", age = 12))
+            em.persist(Person(name = "Peter", age = 14))
+
+            val spec = RQLParser().parse(it, QueryDslAstVisitor(Person::class.java))
+            val result = JPAQueryFactory(em)
+                .selectFrom(PathBuilder(Person::class.java, "root"))
+                .where(spec)
+                .fetch()
+
+            println(result)
+            Assertions.assertThat(result)
+                .hasSize(2)
+                .containsExactlyInAnyOrder(person1, person2)
         }
     }
 }) {

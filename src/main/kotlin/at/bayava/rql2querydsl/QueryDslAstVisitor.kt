@@ -38,8 +38,8 @@ class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisitor<Predica
             }
             is ComparisonOperator -> {
                 if (arguments.any { it is ASTNode }) throw IllegalArgumentException("Operator[${operator}] can't contain other operators!")
-                val opArguments = arguments as List<Any>
-                val selector = opArguments[0] as String
+                val selector = arguments[0] as String
+                val opArguments = arguments.drop(1) as List<Any>
                 val path: PathBuilder<Any> = PathBuilder(
                     clazz,
                     "root"
@@ -47,16 +47,24 @@ class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisitor<Predica
 
 //                val field = (clazz::getDeclaredField)(selector)
 
-                return Expressions.predicate(
-                    operator.qOperator,
-                    path,
-                    Expressions.constant(
-                        opArguments.drop(1)
+
+                val constant = if (operator.multiValue)
+                    Expressions.list(
+                        *opArguments.map {
+                            Expressions.constant(it)
+                        }.toTypedArray()
+                    )
+                else Expressions.constant(
+                    opArguments
 //                        convert(
 //                            node,
 //                            field.type
 //                        )
-                    )
+                )
+                return Expressions.predicate(
+                    operator.qOperator,
+                    path,
+                    constant
                 )
             }
             else -> throw IllegalArgumentException("Operator[${operator::class}] type not implemented!")

@@ -14,5 +14,6 @@ enum class DefaultComparisonOperators(val operator: ComparisonOperator) {
     Ge(ComparisonOperator(Ops.GOE, "ge", "=ge=")),
     GT(ComparisonOperator(Ops.GT, "gt", "=gt=")),
     Le(ComparisonOperator(Ops.LOE, "le", "=le=")),
-    Lt(ComparisonOperator(Ops.LT, "lt", "=lt="))
+    Lt(ComparisonOperator(Ops.LT, "lt", "=lt=")),
+    In(ComparisonOperator(Ops.IN, "in", "=in=", multiValue = true)),
 }
