@@ -2,27 +2,24 @@ package at.bayava.rql2querydsl
 
 import at.bayava.rql2querydsl.spring.entity.Address
 import at.bayava.rql2querydsl.spring.entity.Person
-import com.querydsl.core.types.dsl.PathBuilder
-import com.querydsl.jpa.impl.JPAQueryFactory
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.spring.SpringListener
-import net.jazdw.rql.parser.RQLParser
 import org.assertj.core.api.Assertions
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import javax.persistence.EntityManager
 import javax.transaction.Transactional
 
-
 @Transactional
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.NONE,
+    classes = [RqlExecutorTest::class]
 )
-@SpringBootConfiguration
 @EnableAutoConfiguration
-class QueryDslAstVisitorTest @Autowired constructor(val em: EntityManager) : FunSpec({
+class RqlExecutorTest @Autowired constructor(val em: EntityManager) : FunSpec({
+
+    val cut = RqlExecutor(em)
 
     listOf(
         "and(name=John,lt(age,20))&gt(age,10)",
@@ -65,18 +62,10 @@ class QueryDslAstVisitorTest @Autowired constructor(val em: EntityManager) : Fun
                 )
             )
 
-            val spec = RQLParser().parse(
+            val result = cut.queryByRql(
                 it,
-                QueryDslAstVisitor(Person::class.java)
+                Person::class.java
             )
-            val result = JPAQueryFactory(em).selectFrom(
-                PathBuilder(
-                    Person::class.java,
-                    "root"
-                )
-            )
-                .where(spec)
-                .fetch()
 
             println(result)
             Assertions.assertThat(result)
@@ -128,18 +117,10 @@ class QueryDslAstVisitorTest @Autowired constructor(val em: EntityManager) : Fun
                 )
             )
 
-            val spec = RQLParser().parse(
+            val result = cut.queryByRql(
                 it,
-                QueryDslAstVisitor(Person::class.java)
+                Person::class.java
             )
-            val result = JPAQueryFactory(em).selectFrom(
-                PathBuilder(
-                    Person::class.java,
-                    "root"
-                )
-            )
-                .where(spec)
-                .fetch()
 
             println(result)
             Assertions.assertThat(result)
@@ -206,18 +187,11 @@ class QueryDslAstVisitorTest @Autowired constructor(val em: EntityManager) : Fun
             )
             em.flush()
 
-            val spec = RQLParser().parse(
+            val result = cut.queryByRql(
                 it,
-                QueryDslAstVisitor(Person::class.java)
+                Person::class.java
             )
-            val result = JPAQueryFactory(em).selectFrom(
-                PathBuilder(
-                    Person::class.java,
-                    "root"
-                )
-            )
-                .where(spec)
-                .fetch()
+
 
             println(result)
             Assertions.assertThat(result)
@@ -231,7 +205,3 @@ class QueryDslAstVisitorTest @Autowired constructor(val em: EntityManager) : Fun
 }) {
     override fun listeners() = listOf(SpringListener)
 }
-
-
-
-
