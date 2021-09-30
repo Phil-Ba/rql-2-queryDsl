@@ -35,6 +35,7 @@ dependencies {
 
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.+")
     runtimeOnly("ch.qos.logback:logback-classic:1.2.+")
+    compileOnly("jakarta.persistence:jakarta.persistence-api:2.2.3")
 
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
