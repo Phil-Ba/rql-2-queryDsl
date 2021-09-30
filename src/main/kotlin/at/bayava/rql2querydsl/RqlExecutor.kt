@@ -8,6 +8,7 @@ import javax.persistence.EntityManager
 
 
 private val rqlParser = RQLParser()
+private val queryDslAstVisitor = QueryDslAstVisitor()
 
 class RqlExecutor(entityManager: EntityManager) {
     private val queryFactory = JPAQueryFactory(entityManager)
@@ -18,7 +19,7 @@ class RqlExecutor(entityManager: EntityManager) {
 
         val spec = rqlParser.parse(
             rql,
-            QueryDslAstVisitor(clazz)
+            queryDslAstVisitor
         )
 
         return queryFactory.selectFrom(
