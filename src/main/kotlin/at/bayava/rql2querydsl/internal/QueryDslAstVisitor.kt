@@ -5,15 +5,13 @@ import com.querydsl.core.types.ExpressionUtils
 import com.querydsl.core.types.Ops
 import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.Expressions
-import com.querydsl.core.types.dsl.PathBuilder
 import mu.KotlinLogging
 import net.jazdw.rql.parser.ASTNode
 import net.jazdw.rql.parser.SimpleASTVisitor
 
 private val logger = KotlinLogging.logger {}
 
-//TODO try to remove dependency on clazz
-internal class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisitor<Predicate> {
+internal class QueryDslAstVisitor : SimpleASTVisitor<Predicate> {
 
     private val operatorsBySymbol: Map<String, RqlOperator> = DefaultLogicalOperators.values()
         .map { it.operator }
@@ -47,10 +45,6 @@ internal class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisito
         if (arguments.any { it is ASTNode }) throw IllegalArgumentException("Operator[${operator}] can't contain other operators!")
         val selector = arguments[0] as String
         val opArguments = arguments.drop(1)
-        val path: PathBuilder<Any> = PathBuilder(
-            clazz,
-            "root"
-        ).get(selector)
 
         //                val field = (clazz::getDeclaredField)(selector)
 
@@ -67,7 +61,10 @@ internal class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisito
         )
         return Expressions.predicate(
             operator.qOperator,
-            path,
+            Expressions.path(
+                Object::class.java,
+                selector
+            ),
             constant
         )
     }
