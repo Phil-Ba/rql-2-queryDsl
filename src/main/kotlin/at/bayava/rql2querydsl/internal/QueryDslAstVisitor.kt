@@ -12,6 +12,7 @@ import net.jazdw.rql.parser.SimpleASTVisitor
 
 private val logger = KotlinLogging.logger {}
 
+//TODO try to remove dependency on clazz
 internal class QueryDslAstVisitor(private val clazz: Class<*>) : SimpleASTVisitor<Predicate> {
 
     private val operatorsBySymbol: Map<String, RqlOperator> = DefaultLogicalOperators.values()
