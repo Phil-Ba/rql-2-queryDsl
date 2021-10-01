@@ -19,6 +19,16 @@ The `RqlExcutor` is the main entry class for usage. It is thread safe and an ins
             )
 ```
 
+# TODO
+
+* Add license
+* Publish to Maven Central
+* Feature to add custom expressions
+* Implement grouping
+* Implement field selection
+* Implement aggregation
+* More extensive unit tests
+
 # Links
 
 [RQL Language](https://github.com/persvr/rql)
