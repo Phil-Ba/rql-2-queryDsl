@@ -202,6 +202,39 @@ class RqlExecutorTest @Autowired constructor(val em: EntityManager) : FunSpec({
                 )
         }
     }
+
+    test("asd") {
+        val address1 = Address(
+            street = "street1",
+            number = 1,
+            door = 2
+        )
+        val person1 = Person(
+            name = "Heinz",
+            age = 12,
+            address = address1
+        )
+        em.persist(person1)
+        val person2 = Person(
+            name = "Hans",
+            age = 22,
+        )
+        em.persist(person1)
+        em.persist(address1)
+        em.flush()
+
+        val result = cut.queryByRql(
+            "select(name)&age=lt=20",
+            Person::class.java
+        )
+
+        Assertions.assertThat(result)
+            .containsOnly(person1)
+            .singleElement()
+            .hasFieldOrPropertyWithValue("age", null)
+            .hasFieldOrPropertyWithValue("name", person1.name)
+    }
+
 }) {
     override fun listeners() = listOf(SpringListener)
 }
